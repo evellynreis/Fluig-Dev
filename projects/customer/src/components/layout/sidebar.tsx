@@ -19,12 +19,10 @@ export function Sidebar() {
       </Link>
 
       <div className="workspace-switcher">
-        <span className="workspace-avatar">FD</span>
         <span className="workspace-copy">
           <strong>Meu ambiente</strong>
           <small>Desenvolvimento local</small>
         </span>
-        <ChevronDown size={15} />
       </div>
 
       <nav className="nav" aria-label="Navegação principal">
@@ -66,7 +64,6 @@ export function Sidebar() {
             <strong>Desenvolvedor</strong>
             <small>Workspace pessoal</small>
           </span>
-          <ChevronDown size={15} />
         </div>
       </div>
     </aside>

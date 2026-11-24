@@ -34,11 +34,6 @@ export function Header() {
           Aplicação local
         </span>
 
-        <span className="theme-indicator">
-          <Moon size={18} />
-        </span>
-
-        <span className="top-avatar">D</span>
       </div>
     </header>
   );
