@@ -1,0 +1,2 @@
+import { ValidatorWorkspace } from "@/components/validator/validator-workspace";
+export default function ValidatorPage(){return <div className="module-page"><div className="page-intro"><div className="eyebrow"><span className="eyebrow-line"/> FERRAMENTA</div><h1>Validador de código</h1><p>Verifique sintaxe JavaScript ES5 e regras estruturais comuns de datasets Fluig.</p></div><ValidatorWorkspace/></div>;}

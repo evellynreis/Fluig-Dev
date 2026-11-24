@@ -1,0 +1,46 @@
+---
+description: Fluig Dev product context, stack, and development rules
+alwaysApply: true
+---
+
+# Fluig Dev
+
+Platform for generating, reviewing, correcting, validating, and documenting TOTVS Fluig datasets. Do not execute generated Fluig JavaScript.
+
+## Stack and layout
+
+- Next.js 16 App Router, React 19, TypeScript, Node.js, Tailwind CSS 4, local JSON persistence (Supabase is not required for local single-user use), OpenAI API, Monaco Editor, Lucide React.
+- `projects/customer/src/app`: pages and API routes.
+- `projects/customer/src/components`: reusable UI.
+- `projects/customer/src/lib`: shared utilities and constants.
+- `projects/customer/src/server`: server-side business logic and integrations.
+- `projects/customer/src/types`: shared types.
+- `docs`: technical documentation.
+
+## Development
+
+- TypeScript only. Keep components small and reusable.
+- Keep frontend logic out of `src/server`. Keep secrets and API keys on the server.
+- Validate every API input. Handle errors explicitly; do not swallow them.
+- User-facing UI text is Portuguese (Brazil). Keep the dark professional visual identity (navy, discreet purple).
+- Do not present unimplemented integrations as connected or working.
+- Review and test changes before treating them as complete.
+
+## Fluig
+
+- Do not invent Fluig APIs or methods. Use only APIs documented for the configured Fluig version, and state that version when generating code.
+- Distinguish internal datasets, custom/advanced datasets, and integrations. Say which one the output is.
+- Preserve the business rules the user provided. Explain dependencies and compatibility limits.
+- If a requested method is not confirmed for the configured version, say so and stop. Do not substitute an invented call.
+
+```javascript
+// Bad: invented API
+dataset.addRow(DatasetBuilder.create(values));
+
+// Good: offline dataset structure documented by TOTVS; column names in uppercase
+function defineStructure() {
+  addColumn("CODIGO");
+  addColumn("DESCRICAO");
+  setKey(["CODIGO"]);
+}
+```

@@ -1,0 +1,19 @@
+"use client";
+import { useState } from "react";
+import { BookOpen, CheckCircle2, Download, LoaderCircle, SearchCheck, Sparkles, Wrench } from "lucide-react";
+import { CodeEditor } from "@/components/editor/code-editor";
+import type { ValidationResult } from "@/types/dataset";
+const sample = `function createDataset(fields, constraints, sortFields) {
+    var dataset = DatasetBuilder.newDataset();
+    dataset.addColumn("CODIGO");
+    dataset.addColumn("DESCRICAO");
+    dataset.addRow(["1", "Exemplo"]);
+    return dataset;
+}`;
+export function ValidatorWorkspace() {
+  const [code,setCode]=useState(sample); const [result,setResult]=useState<ValidationResult|null>(null); const [explanation,setExplanation]=useState(""); const [ai,setAi]=useState(false); const [busy,setBusy]=useState(false); const [error,setError]=useState("");
+  async function validate(){setBusy(true);setError("");setExplanation("");try{const response=await fetch("/api/validate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code})});const data=await response.json();if(!response.ok)throw new Error(data.error);setResult(data.result);}catch(e){setError(e instanceof Error?e.message:"Falha ao validar.");}finally{setBusy(false);}}
+  async function analyse(action:"review"|"explain"|"repair"){setBusy(true);setError("");setExplanation("");try{const response=await fetch("/api/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,code})});const data=await response.json();if(!response.ok)throw new Error(data.error);setAi(data.aiUsed);setExplanation(data.result.explanation||data.result.summary);setResult({valid:!data.result.findings.some((item:{severity:string})=>item.severity==="error"),syntaxValid:true,findings:data.result.findings});if(action==="repair"&&data.aiUsed)setCode(data.result.code);}catch(e){setError(e instanceof Error?e.message:"Falha na análise.");}finally{setBusy(false);}}
+  function download(){const url=URL.createObjectURL(new Blob([code],{type:"text/javascript;charset=utf-8"}));const anchor=document.createElement("a");anchor.href=url;anchor.download="dataset.js";anchor.click();URL.revokeObjectURL(url);}
+  return <div className="panel validator-panel"><div className="panel-heading"><div><h2>Código JavaScript</h2><p>Análise estática e revisão; o código nunca é executado.</p></div><SearchCheck size={20}/></div><CodeEditor value={code} onChange={setCode} height={430}/><div className="editor-actions"><button className="primary-button" onClick={validate} disabled={busy}>{busy?<LoaderCircle className="spin" size={15}/>:<CheckCircle2 size={15}/>} Validar código</button><button className="secondary-button" onClick={()=>analyse("review")} disabled={busy}><Sparkles size={15}/> Revisar</button><button className="secondary-button" onClick={()=>analyse("explain")} disabled={busy}><BookOpen size={15}/> Explicar</button><button className="secondary-button" onClick={()=>analyse("repair")} disabled={busy}><Wrench size={15}/> Corrigir com IA</button><button className="secondary-button" onClick={download}><Download size={15}/> Baixar .js</button></div>{error&&<p className="error-message">{error}</p>}{explanation&&<div className="result-details"><h3>Resultado da análise</h3><p>{explanation}</p><small>IA utilizada: {ai?"OpenAI":"não; análise local"}.</small></div>}{result&&<div className="validation-results"><h3>{result.valid?"Nenhum erro crítico encontrado":"Foram encontrados pontos para corrigir"}</h3>{result.findings.length===0?<p className="success-message">Nenhum problema identificado pelas regras estáticas.</p>:result.findings.map((finding,index)=><div className={`finding ${finding.severity}`} key={index}><strong>{finding.severity.toUpperCase()} · {finding.title}</strong><p>{finding.detail}</p>{finding.line&&<small>Linha {finding.line}{finding.column?`, coluna ${finding.column}`:""}</small>}</div>)}</div>}</div>;
+}

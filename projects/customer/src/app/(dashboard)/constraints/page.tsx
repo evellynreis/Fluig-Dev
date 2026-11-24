@@ -1,0 +1,2 @@
+import { ConstraintsBuilder } from "@/components/constraints/constraints-builder";
+export default function ConstraintsPage(){return <div className="module-page"><div className="page-intro"><div className="eyebrow"><span className="eyebrow-line"/> FERRAMENTA</div><h1>Gerador de constraints</h1><p>Monte condições de consulta e copie o JavaScript para utilizar em seus datasets.</p></div><ConstraintsBuilder/></div>;}

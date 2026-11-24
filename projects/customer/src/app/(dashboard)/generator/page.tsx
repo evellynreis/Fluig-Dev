@@ -1,0 +1,2 @@
+import { GeneratorWorkspace } from "@/components/generator/generator-workspace";
+export default function GeneratorPage(){return <div className="module-page"><div className="page-intro"><div className="eyebrow"><span className="eyebrow-line"/> FERRAMENTA</div><h1>Gerador de datasets</h1><p>Descreva o que precisa e gere uma estrutura JavaScript para revisar e adaptar ao seu Fluig.</p></div><GeneratorWorkspace/></div>;}

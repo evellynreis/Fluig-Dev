@@ -1,0 +1,2 @@
+import Link from "next/link";import { ArrowUpRight } from "lucide-react";import { toolItems } from "@/lib/constants/navigation";
+export function ToolGrid(){return <div className="tool-grid">{toolItems.map(tool=><Link className="tool-card" href={tool.href} key={tool.label}><div className="tool-card-top"><span className="tool-icon"><tool.icon size={17}/></span><span className="tool-tag">{tool.status}</span></div><strong>{tool.label}</strong><p>{tool.description}</p><span className="card-arrow">Abrir ferramenta <ArrowUpRight size={13}/></span></Link>)}</div>;}
